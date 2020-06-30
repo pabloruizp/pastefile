@@ -1,0 +1,26 @@
+{
+  "name": "pastefile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pabloruizp/pastefile.git"
+  },
+  "author": "Pablo Ruiz Ponce",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pabloruizp/pastefile/issues"
+  },
+  "homepage": "https://github.com/pabloruizp/pastefile#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}
