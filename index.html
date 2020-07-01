@@ -2,13 +2,79 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <style>
+
+      * {
+        text-align: center;
+        color: whitesmoke;
+      }
+
+      body {
+          width: 100%;
+          margin: 0;
+          background-color: #0f0f0f;
+      }
+
+      H1 {
+        margin-top: 5vh;
+      }
+
+      H1 a {
+        text-decoration: none;
+      }
+
+      form input {
+        width: 20%;
+        min-width: 300px;
+        margin-bottom: 20px;
+      }
+
+      .fFile {
+        border-color: white;
+        border-radius: 2px;
+        border: 1px solid;
+      }
+
+      .sButton {
+        color: black;
+        height: 50px;
+        border-radius: 5px;
+        border: none;
+      }
+
+      .good {
+        color: #94d6a6;
+      }
+
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-      <h1>PasteFile - A shitty copy of PasteBin</h1>
-
+      <h1><a href="/">- pastefile -</a></h1>
+      <p>A shitty copy of Pastebin, but with files</p>
+      <br>
       <form action="/" enctype="multipart/form-data" method="POST">
-        <input id="avatar" name="avatar" type="file">
-        <input type="submit">
+        <input id="avatar" name="avatar" type="file" class="fFile">
+        <br>
+        <input type="submit" value="U P L O A D" class="sButton">
       </form>
+
+      <p id="log">Sample text</p>
+
+      <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        const name = urlParams.get("name")
+        const ext = urlParams.get("ext")
+
+        if (!name || !ext) {
+          document.getElementById("log").innerHTML = ""
+        } else {
+
+          let url = location.protocol + '//' + location.host + location.pathname + 'files/' + name + '.' + ext
+          document.getElementById("log").innerHTML = '<p class="good">File uploaded!</p><a href="' + url + '">' + url + '</a>'
+        }
+      </script>
   </body>
 </html>

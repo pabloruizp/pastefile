@@ -11,7 +11,7 @@ const { nanoid } = require('nanoid')
 let lastDelete = Date.now();
 
 let app = express()
-const delay = 60
+const delay = 60 * 5
 
 
 // enable files upload - soy inutil
@@ -52,12 +52,14 @@ app.post('/', async (req, res) => {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let avatar = req.files.avatar;
             
-            let newName = nanoid() + path.extname(avatar.name)
+            let extension = path.extname(avatar.name)
+            let nameId = nanoid()
+            let newName = nameId + extension
             //Use the mv() method to place the file in upload directory (i.e. "uploads")
             avatar.mv('./public/' + newName);
 
             url = req.protocol + '://' + req.get('host') + req.originalUrl + 'files/' + newName
-            res.send('File uploaded!<br><a href="' + url + '">'+ url + '</a>')
+            res.redirect(req.protocol + '://' + req.get('host') + req.originalUrl + '?name=' + nameId + '&ext=' + extension.substring(1))
         }
     } catch (err) {
         res.status(500).send(err);
