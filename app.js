@@ -7,16 +7,21 @@ const cors = require('cors')
 const fsExtra = require('fs-extra')
 const { nanoid } = require('nanoid')
 
-
+// Initial time on load the app
 let lastDelete = Date.now();
 
 let app = express()
-const delay = 60 * 5
+
+// All the files are deleted every 5 minutes
+const delay = 60 * 5 
 
 
-// enable files upload - soy inutil
+// Enable file upload
 app.use(fileUpload({
-    createParentPath: true
+    createParentPath: true,
+    limits: { 
+        fileSize: 10 * 1024 * 1024 * 1024 //10 MB max file(s) size
+    },
 }));
 
 app.use(cors())
@@ -24,23 +29,24 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-
+// Directory to store the files
 app.use('/files',express.static(__dirname + '/public'))
 
+// Before each request, the time of the last global delete is checked
 app.use(function (req, res, next) {
-    var diff = Date.now() - lastDelete
-    console.log(diff)
+    
     if ((Date.now() - lastDelete) > (delay * 1000)) {
         fsExtra.emptyDir(__dirname + "/public/", (err) => {
             if (err) throw(err)
             console.log("Folder clean")
         })
+
         lastDelete = Date.now();
     }
     next()
 });
 
-
+// Thanks to https://attacomsian.com/blog/uploading-files-nodejs-express
 app.post('/', async (req, res) => {
     try {
         if(!req.files) {
@@ -55,9 +61,10 @@ app.post('/', async (req, res) => {
             let extension = path.extname(avatar.name)
             let nameId = nanoid()
             let newName = nameId + extension
-            //Use the mv() method to place the file in upload directory (i.e. "uploads")
+            //Use the mv() method to place the file in upload directory 
             avatar.mv('./public/' + newName);
 
+            // Send of GET parameters to the index.html
             url = req.protocol + '://' + req.get('host') + req.originalUrl + 'files/' + newName
             res.redirect(req.protocol + '://' + req.get('host') + req.originalUrl + '?name=' + nameId + '&ext=' + extension.substring(1))
         }
