@@ -27,6 +27,6 @@
     "express-fileupload": "^1.1.9",
     "fs-extra": "^9.0.1",
     "morgan": "^1.10.0",
-    "nanoid": "^3.1.10"
+    "nanoid": "^3.1.31"
   }
 }
